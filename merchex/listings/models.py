@@ -5,8 +5,10 @@ from django.db import models
 from django.db.models import CharField
 
 
-# class User(AbstractUser):
-#     password_confirmation = CharField(max_length=50)
+class User(AbstractUser):
+    # username = CharField(max_length=100)
+    # password = CharField(max_length=50)
+    password_confirmation = CharField(max_length=50)
 
 
 class Ticket(models.Model):

@@ -2,12 +2,14 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.views.decorators.csrf import csrf_protect
 from listings.forms import SignUpForm
 
 
+@csrf_protect
 def sign_up(request):
     # ceci doit être une requête POST, donc le formulaire est rempli
-    message = ""
+    # message = ""
     if request.method == 'POST':
         # créer une instance de notre formulaire "rempli" avec les données du POST
         form = SignUpForm(request.POST)
@@ -21,8 +23,8 @@ def sign_up(request):
                 login(request, user)
                 # message = f'Bonjour, {user.username}! Vous êtes connecté.'
                 return redirect('dashboard')
-            else:
-                message = 'Identifiants invalides.'
+            # else:
+                # message = 'Identifiants invalides.'
 
             # ajoutez cette instruction de retour
             # return redirect('dashboard')
@@ -32,8 +34,8 @@ def sign_up(request):
         form = SignUpForm()
 
     # passe ce formulaire au gabarit
-    return render(request, 'listings/sign_up.html', {'form': form, 'message': message})
+    return render(request, 'listings/sign_up.html', {'form': form})
 
 
 def dashboard(request):
-    return render(request, 'listings/dashboard.html')
+    return render(request, 'listings/dashboard.html', {})
