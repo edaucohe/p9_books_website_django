@@ -1,6 +1,17 @@
 .idea/
+
+# Environments
 env/
+
+# Local folders
 p9_books_website_django/
 references/
-#__pycache__/
-#*.pyc
+
+# Django
+*.log
+*.pot
+*.pyc
+*/*/*/__pycache__/
+*/*/__pycache__/
+*/__pycache__/
+__pycache__/
