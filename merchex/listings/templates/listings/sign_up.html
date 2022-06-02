@@ -6,7 +6,7 @@
 
     <form action="" method="post" novalidate>
         <!-- {% csrf_token %} est une ligne de sécurité qu'il faut intégrer dans le formulaire -->
-        {% csrf_token %}
+<!--        {% csrf_token %}-->
         <!-- {{ form.as_p }} permet d'empiler les champs. Si on ne le veut pas, on laisse juste {{ form }} -->
         {{ form.as_p }}
         <input type="submit" value="Envoyer">

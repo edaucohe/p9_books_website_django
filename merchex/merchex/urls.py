@@ -20,7 +20,9 @@ from listings import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('', views.root),  # index.html
     path('sign_up/', views.sign_up, name='sign-up'),
     # path('sign_in/', views.sign_in, name='sign-in'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    # path('log_out', views.log_out, name='log-out'),
 ]

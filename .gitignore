@@ -2,3 +2,5 @@
 env/
 p9_books_website_django/
 references/
+#__pycache__/
+#*.pyc
