@@ -2,11 +2,16 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from django.views.decorators.csrf import csrf_protect
+# from django.views.decorators.csrf import csrf_protect
 from listings.forms import SignUpForm
 
 
-@csrf_protect
+# def log_out(request):
+#     logout(request)
+#     return redirect('sign_up')
+
+
+# @csrf_protect
 def sign_up(request):
     # ceci doit être une requête POST, donc le formulaire est rempli
     # message = ""
@@ -38,4 +43,4 @@ def sign_up(request):
 
 
 def dashboard(request):
-    return render(request, 'listings/dashboard.html', {})
+    return render(request, 'listings/dashboard.html')
