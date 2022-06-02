@@ -8,5 +8,5 @@ class SignUpForm(forms.Form):
 
 
 class SignInForm(forms.Form):
-    name = forms.CharField(max_length=100, label="Nom d'utilisateur")
+    username = forms.CharField(max_length=100, label="Nom d'utilisateur")
     password = forms.CharField(max_length=50, widget=forms.PasswordInput, label="Mot de passe")

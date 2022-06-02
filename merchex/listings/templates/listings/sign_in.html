@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'listings/base.html' %}
 
-</body>
-</html>
+{% block content %}
+
+    <h1>Se connecter</h1>
+
+    <form action="" method="post" novalidate>
+        <!-- {% csrf_token %} est une ligne de sécurité qu'il faut intégrer dans le formulaire -->
+<!--        {% csrf_token %}-->
+        <!-- {{ form.as_p }} permet d'empiler les champs. Si on ne le veut pas, on laisse juste {{ form }} -->
+        {{ form.as_p }}
+        <input type="submit" value="Envoyer">
+    </form>
+
+{% endblock %}
