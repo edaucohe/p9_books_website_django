@@ -13,7 +13,9 @@
                         <li><a href="tickets">Tickets</a></li>
                         <li>Posts</li>
                         <li>Abonnements</li>
-                        <li>Déconnexion</li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'log-out' %}">Déconnexion</a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </header>

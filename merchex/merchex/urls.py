@@ -30,5 +30,5 @@ urlpatterns = [
     # path('posts/', views.posts, name='posts'),
     # path('suscriptions/', views.suscriptions, name='suscriptions'),
     # path('tickets/', views.tickets, name='tickets'),
-    # path('log_out', views.log_out, name='log-out'),
+    path('log_out/', views.log_out, name='log-out'),
 ]

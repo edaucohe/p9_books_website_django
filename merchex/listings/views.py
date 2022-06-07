@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -7,9 +7,10 @@ from django.shortcuts import render, redirect
 # from . import forms
 from listings import forms
 
-# def log_out(request):
-#     logout(request)
-#     return redirect('sign_up')
+
+def log_out(request):
+    logout(request)
+    return redirect('sign-in')
 
 
 # @csrf_protect
