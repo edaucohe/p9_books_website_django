@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -90,6 +91,7 @@ def sign_in(request):
 #     return render(request, 'listings/sign.html', {'sign_up_form': sign_up_form, 'sign_in_form': sign_in_form})
 
 
+@login_required
 def dashboard(request):
     return render(request, 'listings/dashboard.html')
 
