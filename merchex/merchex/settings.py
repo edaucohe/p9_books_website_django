@@ -128,3 +128,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'listings.User'
 
 LOGIN_URL = 'sign-in'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media/'

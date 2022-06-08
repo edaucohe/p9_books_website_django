@@ -6,14 +6,23 @@ from django.db.models import CharField
 
 
 class User(AbstractUser):
-    # username = CharField(max_length=100)
-    # password = CharField(max_length=50)
     password_confirmation = CharField(max_length=50)
+
+
+class Photo(models.Model):
+    image = models.ImageField()
+    caption = models.CharField(max_length=128, blank=True)
+    uploader = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
 
 
 class Ticket(models.Model):
     # Your Ticket model definition goes here
-    pass
+    title = models.CharField(max_length=128)  # default='')
+    description = models.TextField(max_length=2048)  # default='')
+    photo = models.ForeignKey(Photo, null=True, on_delete=models.SET_NULL, blank=True)
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    time_created = models.DateTimeField(auto_now_add=True)  # null=True)
 
 
 class Review(models.Model):
@@ -26,10 +35,15 @@ class Review(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
 
 
-# class UserFollows(models.Model):
-#     # Your UserFollows model definition goes here
-#
-#     class Meta:
-#         # ensures we don't get multiple UserFollows instances
-#         # for unique user-user_followed pairs
-#         unique_together = ('user', 'followed_user', )
+class UserFollows(models.Model):
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    followed_user = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='followed_by'
+    )
+
+    class Meta:
+        # ensures we don't get multiple UserFollows instances
+        # for unique user-user_followed pairs
+        unique_together = ('user', 'followed_user', )

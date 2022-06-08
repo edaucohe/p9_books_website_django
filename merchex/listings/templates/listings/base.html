@@ -9,8 +9,8 @@
             <header>
                 <nav>
                     <ul class="menu">
-                        <li><a href="dashboard">Tableau de bord</a></li>
-                        <li><a href="tickets">Tickets</a></li>
+                        <li><a href="{% url 'dashboard' %}">Tableau de bord</a></li>
+                        <li><a href="{% url 'tickets' %}">Tickets</a></li>
                         <li>Posts</li>
                         <li>Abonnements</li>
                         {% if user.is_authenticated %}

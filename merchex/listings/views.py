@@ -96,6 +96,48 @@ def dashboard(request):
     return render(request, 'listings/dashboard.html')
 
 
+# @login_required
+# def photo_upload(request):
+#     form = forms.PhotoForm()
+#     if request.method == 'POST':
+#         form = forms.PhotoForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             photo = form.save(commit=False)
+#             # set the uploader to the user before saving the model
+#             photo.uploader = request.user
+#             # now we can save
+#             photo.save()
+#             return redirect('home')
+#     return render(request, 'blog/photo_upload.html', context={'form': form})
+
+
+@login_required
+def create_tickets(request):
+    ticket_form = forms.TicketForm()
+    photo_form = forms.PhotoForm()
+    if request.method == 'POST':
+        # handle the POST request here
+        ticket_form = forms.TicketForm(request.POST)
+        photo_form = forms.PhotoForm(request.POST, request.FILES)
+        if all([ticket_form.is_valid(), photo_form.is_valid()]):
+            photo = photo_form.save(commit=False)
+            photo.uploader = request.user
+            photo.save()
+
+            ticket = ticket_form.save(commit=False)
+            ticket.user = request.user
+            ticket.photo = photo
+            ticket.save()
+
+            return redirect('dashboard')
+
+    forms_as_context = {
+        'ticket_form': ticket_form,
+        'photo_form': photo_form,
+    }
+    return render(request, 'listings/tickets.html', context=forms_as_context)
+
+
 # def tickets(request):
 #     if request.method == 'POST':
 #         tickets_form = TicketsForm()
