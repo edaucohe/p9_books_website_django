@@ -8,6 +8,7 @@
         {% for ticket in tickets %}
             <div class="post">
                     <h4>Ticket : {{ ticket.title }}</h4>
+                    <p>Description : {{ ticket.description }}</p>
                     <img src="{{ ticket.photo.image.url }}">
             </div>
         {% endfor %}
