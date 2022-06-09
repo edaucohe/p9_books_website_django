@@ -1,12 +1,14 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+# from django.db.models import Q
 
 # Create your views here.
 # from django.views.decorators.csrf import csrf_protect
 # from listings.forms import SignUpForm, SignInForm
 # from . import forms
 from listings import forms
+from . import models
 
 
 def log_out(request):
@@ -93,7 +95,17 @@ def sign_in(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'listings/dashboard.html')
+    username = request.user.username
+    tickets = models.Ticket.objects.all()
+    photos = models.Photo.objects.all()
+
+    models_as_context = {
+        'username': username,
+        'tickets': tickets,
+        'photos': photos
+    }
+    return render(request, 'listings/dashboard.html', context=models_as_context)
+    # return render(request, 'listings/dashboard.html')
 
 
 # @login_required
@@ -138,7 +150,35 @@ def create_tickets(request):
     return render(request, 'listings/tickets.html', context=forms_as_context)
 
 
-# def tickets(request):
+# @login_required
+# def edit_ticket(request, ticket_id):
+#     ticket = get_object_or_404(models.Ticket, id=ticket_id)
+#     edit_form = forms.TicketForm(instance=ticket)
+#     delete_form = forms.DeleteTicketForm()
+#
 #     if request.method == 'POST':
-#         tickets_form = TicketsForm()
-#     return render(request, 'listings/tickets.html')
+#         if 'edit_ticket' in request.POST:
+#             edit_form = forms.TicketForm(request.POST, instance=ticket)
+#
+#             if edit_form.is_valid():
+#                 edit_form.save()
+#                 return redirect('dashboard')
+#
+#         if 'delete_ticket' in request.POST:
+#             delete_form = forms.DeleteTicketForm(request.POST)
+#
+#             if delete_form.is_valid():
+#                 ticket.delete()
+#                 return redirect('dashboard')
+#
+#     forms_as_context = {
+#         'edit_form': edit_form,
+#         'delete_form': delete_form,
+#     }
+#     return render(request, 'listings/edit_ticket.html', context=forms_as_context)
+
+
+# @login_required
+# def posts(request, ticket_id):
+#     ticket = get_object_or_404(models.Ticket, id=ticket_id)
+#     return render(request, 'listings/posts.html', {'ticket': ticket})

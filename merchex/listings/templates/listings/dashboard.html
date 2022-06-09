@@ -3,7 +3,15 @@
 {% block content %}
 
     <h1>Tableau de bord</h1>
-    <p>Bienvenue au tableau de bord</p>
-<!--    <p>{{ message }}</p>-->
+    <p>Bienvenue {{ username }} au tableau de bord !</p>
+<!--    <p>Tickets : {{ tickets }}</p>-->
+    <div class="grid-container">
+        {% for ticket in tickets %}
+            <div class="post">
+                    <h4>Ticket : {{ ticket.title }}</h4>
+                    <img src="{{ ticket.photo.image.url }}">
+            </div>
+        {% endfor %}
+    </div>
 
 {% endblock %}
