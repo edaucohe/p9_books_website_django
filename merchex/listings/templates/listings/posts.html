@@ -1,0 +1,18 @@
+{% extends 'listings/base.html' %}
+
+{% block content %}
+
+    <h1>Posts</h1>
+        <p>Vous trouverez ci-listés vos posts</p>
+        <div class="grid-container">
+            {% for ticket in tickets %}
+                <div class="post">
+                        <h4>Ticket : {{ ticket.title }}</h4>
+                        <p>Description : {{ ticket.description }}</p>
+                        <img src="{{ ticket.photo.image.url }}">
+
+                </div>
+            {% endfor %}
+        </div>
+
+{% endblock content %}

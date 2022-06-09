@@ -177,7 +177,15 @@ def create_tickets(request):
 #     return render(request, 'listings/edit_ticket.html', context=forms_as_context)
 
 
-# @login_required
-# def posts(request, ticket_id):
-#     ticket = get_object_or_404(models.Ticket, id=ticket_id)
-#     return render(request, 'listings/posts.html', {'ticket': ticket})
+@login_required
+def posts(request):
+    username = request.user.username
+    tickets = models.Ticket.objects.filter(Q(user__username__iexact=username))
+    photos = models.Photo.objects.filter(Q(uploader__username__iexact=username))
+
+    models_as_context = {
+        'username': username,
+        'tickets': tickets,
+        'photos': photos
+    }
+    return render(request, 'listings/posts.html', context=models_as_context)

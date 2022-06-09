@@ -29,11 +29,11 @@ urlpatterns = [
     path('sign_up/', views.sign_up, name='sign-up'),
     path('sign_in/', views.sign_in, name='sign-in'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    # path('posts/', views.posts, name='posts'),
+    path('posts/', views.posts, name='posts'),
     # path('suscriptions/', views.suscriptions, name='suscriptions'),
     path('tickets/', views.create_tickets, name='tickets'),
     path('log_out/', views.log_out, name='log-out'),
-    # path('ticket/<int:ticket_id>/edit', views.edit_ticket, name='edit-ticket'),
+    # path('ticket/<int:ticket_id>/edit/', views.edit_ticket, name='edit_ticket'),
 ]
 
 if settings.DEBUG:
