@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-# from django.db.models import Q
+from django.db.models import Q
 
 # Create your views here.
 # from django.views.decorators.csrf import csrf_protect
@@ -96,8 +96,8 @@ def sign_in(request):
 @login_required
 def dashboard(request):
     username = request.user.username
-    tickets = models.Ticket.objects.all()
-    photos = models.Photo.objects.all()
+    tickets = models.Ticket.objects.filter(Q(user__username__iexact=username))
+    photos = models.Photo.objects.filter(Q(uploader__username__iexact=username))
 
     models_as_context = {
         'username': username,
@@ -105,7 +105,6 @@ def dashboard(request):
         'photos': photos
     }
     return render(request, 'listings/dashboard.html', context=models_as_context)
-    # return render(request, 'listings/dashboard.html')
 
 
 # @login_required

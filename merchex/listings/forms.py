@@ -10,21 +10,9 @@ class SignUpForm(UserCreationForm):
         fields = ('username',)
 
 
-# class SignUpForm(forms.Form):
-#     username = forms.CharField(max_length=100, label="Nom d'utilisateur")
-#     password = forms.CharField(max_length=50, widget=forms.PasswordInput, label="Mot de passe")
-#     password_confirmation = forms.CharField(max_length=50, widget=forms.PasswordInput, label="Confirmer mot de passe")
-
-
 class SignInForm(forms.Form):
     username = forms.CharField(max_length=100, label="Nom d'utilisateur")
     password = forms.CharField(max_length=50, widget=forms.PasswordInput, label="Mot de passe")
-
-
-class TicketForm(forms.ModelForm):
-    class Meta:
-        model = models.Ticket
-        fields = ['title', 'description']
 
 
 class PhotoForm(forms.ModelForm):
@@ -32,3 +20,14 @@ class PhotoForm(forms.ModelForm):
         model = models.Photo
         fields = ('image',)
 
+
+class TicketForm(forms.ModelForm):
+    # edit_ticket = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+    class Meta:
+        model = models.Ticket
+        fields = ['title', 'description']
+
+
+# class DeleteTicketForm(forms.Form):
+#     delete_ticket = forms.BooleanField(widget=forms.HiddenInput, initial=True)
