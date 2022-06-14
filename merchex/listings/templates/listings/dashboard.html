@@ -10,7 +10,7 @@
                 <h3>{{ ticket.title }}</h3>
                 <p>{{ ticket.description }}</p>
                 <img src="{{ ticket.photo.image.url }}">
-                <p><a href="{% url 'reviews' %}">Créez une critique</a></p>
+                <p><a href="{% url 'create_review' ticket.id %}">Créez une critique</a></p>
             </div>
         {% endfor %}
 

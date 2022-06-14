@@ -98,13 +98,12 @@ def dashboard(request):
     username = request.user.username
     tickets = models.Ticket.objects.filter(Q(user__username__iexact=username))
     photos = models.Photo.objects.filter(Q(uploader__username__iexact=username))
-    reviews = models.Review.objects.filter(Q(user__username__iexact=username))
+    # reviews = models.Review.objects.filter(Q(user__username__iexact=username))
 
     models_as_context = {
         'username': username,
         'tickets': tickets,
-        'photos': photos,
-        'reviews': reviews
+        'photos': photos
     }
     return render(request, 'listings/dashboard.html', context=models_as_context)
 
@@ -194,8 +193,11 @@ def posts(request):
 
 
 @login_required
-def create_reviews(request):
+def create_review(request, ticket_id):
+    # username = request.user.username
     review_form = forms.ReviewForm()
+    ticket = get_object_or_404(models.Ticket, id=ticket_id)
+    # ticket = models.Ticket.objects.filter(Q(user__username__iexact=username))
 
     if request.method == 'POST':
         # handle the POST request here
@@ -204,8 +206,9 @@ def create_reviews(request):
         if review_form.is_valid():
             review = review_form.save(commit=False)
             review.user = request.user
+            review.ticket = ticket
             review.save()
 
             return redirect('dashboard')
 
-    return render(request, 'listings/reviews.html', context={'review_form': review_form})
+    return render(request, 'listings/create_review.html', context={'review_form': review_form})
