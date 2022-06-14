@@ -21,6 +21,7 @@ class PhotoForm(forms.ModelForm):
         fields = ('image',)
 
 
+# Ticket Forms
 class TicketForm(forms.ModelForm):
     edit_ticket = forms.BooleanField(widget=forms.HiddenInput, initial=True)
 
@@ -31,3 +32,16 @@ class TicketForm(forms.ModelForm):
 
 class DeleteTicketForm(forms.Form):
     delete_ticket = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+
+# Review forms
+class ReviewForm(forms.ModelForm):
+    edit_review = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+    class Meta:
+        model = models.Review
+        fields = ['headline', 'body', 'rating']
+
+
+class DeleteReviewForm(forms.Form):
+    delete_review = forms.BooleanField(widget=forms.HiddenInput, initial=True)

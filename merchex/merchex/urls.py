@@ -34,6 +34,7 @@ urlpatterns = [
     path('tickets/', views.create_tickets, name='tickets'),
     path('log_out/', views.log_out, name='log-out'),
     path('ticket/<int:ticket_id>/edit/', views.edit_ticket, name='edit_ticket'),
+    path('reviews/', views.create_reviews, name='reviews'),
 ]
 
 if settings.DEBUG:
