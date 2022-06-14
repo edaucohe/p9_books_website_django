@@ -11,7 +11,7 @@
                     <ul class="menu">
                         <li><a href="{% url 'dashboard' %}">Tableau de bord</a></li>
                         <li><a href="{% url 'tickets' %}">Tickets</a></li>
-                        <li>Posts</li>
+                        <li><a href="{% url 'posts' %}">Posts</a></li>
                         <li>Abonnements</li>
                         {% if user.is_authenticated %}
                             <li><a href="{% url 'log-out' %}">Déconnexion</a></li>
