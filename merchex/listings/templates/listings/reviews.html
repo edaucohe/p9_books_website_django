@@ -1,0 +1,18 @@
+{% extends 'listings/base.html' %}
+
+{% block content %}
+
+    <h1>Reviews</h1>
+    <p>Vous trouverez ci-listés vos reviews</p>
+    <div class="grid-container">
+        {% for review in reviews %}
+            <div class="post">
+                <h3>Titre : {{ review.headline }}</h3>
+                <p>Commentaire : {{ review.body }}</p>
+                <p>Rating : {{ review.rating }}</p>
+                <p><a href="{% url 'edit_review' review.id %}">Modifier/Supprimer la review</a></p>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock content %}

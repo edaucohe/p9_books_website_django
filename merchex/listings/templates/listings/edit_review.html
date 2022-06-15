@@ -1,0 +1,18 @@
+{% extends 'listings/base.html' %}
+
+{% block content %}
+
+    <h2>Modifier le billet</h2>
+    <form method="post">
+        {{ edit_form.as_p }}
+        <button type="submit" >Sauvegarder</button>
+    </form>
+    <hr>
+
+    <h2>Supprimer le billet ?</h2>
+    <form method="post">
+        {{ delete_form }}
+        <button type="submit" >Supprimer</button>
+    </form>
+
+{% endblock content %}

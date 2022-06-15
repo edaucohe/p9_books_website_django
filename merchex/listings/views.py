@@ -212,3 +212,43 @@ def create_review(request, ticket_id):
             return redirect('dashboard')
 
     return render(request, 'listings/create_review.html', context={'review_form': review_form})
+
+
+@login_required
+def show_reviews(request):
+    username = request.user.username
+    reviews = models.Review.objects.filter(Q(user__username__iexact=username))
+
+    models_as_context = {
+        'username': username,
+        'reviews': reviews,
+    }
+    return render(request, 'listings/reviews.html', context=models_as_context)
+
+
+@login_required
+def edit_review(request, review_id):
+    review = get_object_or_404(models.Review, id=review_id)
+    review_form = forms.ReviewForm(instance=review)
+    delete_form = forms.DeleteReviewForm()
+
+    if request.method == 'POST':
+        if 'edit_review' in request.POST:
+            review_form = forms.ReviewForm(request.POST, instance=review)
+
+            if review_form.is_valid():
+                review_form.save()
+                return redirect('dashboard')
+
+        if 'delete_review' in request.POST:
+            delete_form = forms.DeleteReviewForm(request.POST)
+
+            if delete_form.is_valid():
+                review.delete()
+                return redirect('dashboard')
+
+    forms_as_context = {
+        'edit_form': review_form,
+        'delete_form': delete_form,
+    }
+    return render(request, 'listings/edit_review.html', context=forms_as_context)
