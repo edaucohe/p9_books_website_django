@@ -2,17 +2,17 @@
 
 {% block content %}
 
-    <h1>Posts</h1>
-        <p>Vous trouverez ci-listés vos posts</p>
-        <div class="grid-container">
-            {% for ticket in tickets %}
-                <div class="post">
-                        <h3>{{ ticket.title }}</h3>
-                        <p>{{ ticket.description }}</p>
-                        <img src="{{ ticket.photo.image.url }}">
-                        <p><a href="{% url 'edit_ticket' ticket.id %}">Modifier/Supprimer le ticket</a></p>
-                </div>
-            {% endfor %}
-        </div>
+    <h1>Billets</h1>
+    <p>Modifiez vos tickets ou supprimez-les !</p>
+    <div class="grid-container">
+        {% for ticket in tickets %}
+            <div class="post">
+                <h3 class="title">{{ ticket.title }}</h3>
+                <p class="description">{{ ticket.description }}</p>
+                <img id="book-image" class="book-image" src="{{ ticket.photo.image.url }}">
+                <p class="link-text"><a href="{% url 'edit_ticket' ticket.id %}">Modifier/Supprimer le ticket</a></p>
+            </div>
+        {% endfor %}
+    </div>
 
 {% endblock content %}

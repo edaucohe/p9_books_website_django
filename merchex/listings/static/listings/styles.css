@@ -1,0 +1,106 @@
+*{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+body{
+  font-family: arial, helvetica, sans-serif;
+  background-color: #f0efed;
+}
+#container{
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 90%;
+  color: #113c62;
+}
+
+header{
+  height: 100px;
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+}
+nav{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+ul{
+  list-style: none;
+  font-size: 25px;
+}
+ul li{
+  float: left;
+  padding-left: 75px;
+}
+ul li a{
+  color: #113c62;
+}
+ul li a:hover{
+  text-decoration: underline;
+}
+
+section{
+  border: 2px solid #113c62;
+  width: auto;
+  height: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.post{
+  border: 2px solid #113c62;
+  width: auto;
+  height: 250px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+.post .title{
+  position: absolute;
+  left: 25px;
+  top: 25px;
+}
+.post .description{
+  width: 80%;
+  position: absolute;
+  left: 25px;
+  top: 60px;
+}
+.post .rating{
+  width: 80%;
+  position: absolute;
+  left: 25px;
+  top: 60px;
+}
+.post .comment{
+  width: 80%;
+  position: absolute;
+  left: 25px;
+  top: 90px;
+}
+.post .link-text{
+  position: absolute;
+  left: 25px;
+  bottom: 25px;
+}
+.post .link-text a{
+  color: #1465ba;
+}
+.post .link-text a:hover{
+  text-decoration: underline;
+}
+.post .book-image{
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  max-height: 200px;
+}

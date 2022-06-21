@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Title</title>
+        <link rel="stylesheet" href="{% static 'listings/styles.css' %}" />
     </head>
     <body>
         <div id="container">
@@ -11,8 +13,8 @@
                     <ul class="menu">
                         <li><a href="{% url 'dashboard' %}">Tableau de bord</a></li>
                         <li><a href="{% url 'tickets' %}">Tickets</a></li>
-                        <li><a href="{% url 'posts' %}">Posts</a></li>
-                        <li><a href="{% url 'reviews' %}">Reviews</a></li>
+                        <li><a href="{% url 'posts' %}">Billets</a></li>
+                        <li><a href="{% url 'reviews' %}">Critiques</a></li>
                         <li>Abonnements</li>
                         {% if user.is_authenticated %}
                             <li><a href="{% url 'log-out' %}">Déconnexion</a></li>

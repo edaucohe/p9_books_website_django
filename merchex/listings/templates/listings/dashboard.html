@@ -3,14 +3,15 @@
 {% block content %}
 
     <h1>Tableau de bord</h1>
-    <p>Bienvenue {{ username }} au tableau de bord !</p>
+    <p>Bienvenue {{ username }} !</p>
+    <p>Créez une critique</p>
     <div class="grid-container">
         {% for ticket in tickets %}
             <div class="post">
-                <h3>{{ ticket.title }}</h3>
-                <p>{{ ticket.description }}</p>
-                <img src="{{ ticket.photo.image.url }}">
-                <p><a href="{% url 'create_review' ticket.id %}">Créez une critique</a></p>
+                <h3 class="title">{{ ticket.title }}</h3>
+                <p class="description">{{ ticket.description }}</p>
+                <img id="book-image" class="book-image" src="{{ ticket.photo.image.url }}">
+                <p class="link-text"><a href="{% url 'create_review' ticket.id %}">Créez une critique</a></p>
             </div>
         {% endfor %}
 
