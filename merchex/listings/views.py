@@ -13,7 +13,7 @@ from . import models
 
 def log_out(request):
     logout(request)
-    return redirect('sign-in')
+    return redirect('sign')
 
 
 # @csrf_protect
@@ -56,41 +56,37 @@ def sign_in(request):
     return render(request, 'listings/sign_in.html', {'form': form})
 
 
-# def sign(request):
-#     if request.method == 'POST':
-#         sign_up_form = forms.SignUpForm(request.POST)
-#         sign_in_form = forms.SignInForm(request.POST)
-#
-#         # Sign up form
-#         if 'sign_up_btn' in request.POST:
-#             sign_up_form = forms.SignUpForm(request.POST)
-#             if sign_up_form.is_valid():
-#                 sign_up_user = authenticate(
-#                     username=sign_up_form.cleaned_data['username'],
-#                     password=sign_up_form.cleaned_data['password'],
-#                     password_confirmation=sign_up_form.cleaned_data['password_confirmation'],
-#                 )
-#                 if sign_up_user is not None:
-#                     login(request, sign_up_user)
-#                     return redirect('dashboard')
-#
-#         # Sign in form
-#         elif 'sign_in_btn' in request.POST:
-#             sign_in_form = forms.SignInForm(request.POST)
-#             if sign_in_form.is_valid():
-#                 sign_in_user = authenticate(
-#                     username=sign_in_form.cleaned_data['username'],
-#                     password=sign_in_form.cleaned_data['password'],
-#                 )
-#                 if sign_in_user is not None:
-#                     login(request, sign_in_user)
-#                     return redirect('dashboard')
-#
-#     else:
-#         sign_up_form = forms.SignUpForm()
-#         sign_in_form = forms.SignInForm()
-#
-#     return render(request, 'listings/sign.html', {'sign_up_form': sign_up_form, 'sign_in_form': sign_in_form})
+def sign(request):
+    if request.method == 'POST':
+        sign_up_form = forms.SignUpForm(request.POST)
+        sign_in_form = forms.SignInForm(request.POST)
+
+        # Sign up form
+        if 'sign_up_btn' in request.POST:
+            sign_up_form = forms.SignUpForm(request.POST)
+            if sign_up_form.is_valid():
+                user = sign_up_form.save()
+                if user is not None:
+                    login(request, user)
+                    return redirect('dashboard')
+
+        # Sign in form
+        elif 'sign_in_btn' in request.POST:
+            sign_in_form = forms.SignInForm(request.POST)
+            if sign_in_form.is_valid():
+                sign_in_user = authenticate(
+                    username=sign_in_form.cleaned_data['username'],
+                    password=sign_in_form.cleaned_data['password'],
+                )
+                if sign_in_user is not None:
+                    login(request, sign_in_user)
+                    return redirect('dashboard')
+
+    else:
+        sign_up_form = forms.SignUpForm()
+        sign_in_form = forms.SignInForm()
+
+    return render(request, 'listings/sign.html', {'sign_up_form': sign_up_form, 'sign_in_form': sign_in_form})
 
 
 @login_required
