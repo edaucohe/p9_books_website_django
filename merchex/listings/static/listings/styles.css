@@ -70,19 +70,19 @@ section{
   top: 25px;
 }
 .post .description{
-  width: 80%;
+  width: 55%;
   position: absolute;
   left: 25px;
   top: 60px;
 }
 .post .rating{
-  width: 80%;
+  width: 55%;
   position: absolute;
   left: 25px;
   top: 60px;
 }
 .post .comment{
-  width: 80%;
+  width: 55%;
   position: absolute;
   left: 25px;
   top: 90px;
