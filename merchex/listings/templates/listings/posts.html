@@ -3,14 +3,16 @@
 {% block content %}
 
     <h1>Billets</h1>
-    <p>Modifiez vos tickets ou supprimez-les !</p>
+    <p>Modifiez vos billets ou supprimez-les !</p>
     <div class="grid-container">
         {% for ticket in tickets %}
             <div class="post">
-                <h3 class="title">{{ ticket.title }}</h3>
-                <p class="description">{{ ticket.description }}</p>
-                <img id="book-image" class="book-image" src="{{ ticket.photo.image.url }}">
-                <p class="link-text"><a href="{% url 'edit_ticket' ticket.id %}">Modifier/Supprimer le ticket</a></p>
+                <div class="post-description">
+                    <h3 class="title">{{ ticket.title }}</h3>
+                    <p class="description">{{ ticket.description }}</p>
+                    <img id="book-image" class="book-image" src="{{ ticket.photo.image.url }}">
+                    <p class="link-text"><a href="{% url 'edit_ticket' ticket.id %}">Modifier/Supprimer le billet</a></p>
+                </div>
             </div>
         {% endfor %}
     </div>
