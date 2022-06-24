@@ -3,15 +3,35 @@
 {% block content %}
 
     <h1>Tableau de bord</h1>
+    <br>
     <p>Bienvenue {{ username }} !</p>
-    <p>Créez une critique</p>
+    <br>
+    <p><a href="{% url 'tickets' %}">Créez un ticket</a></p>
     <div class="grid-container">
         {% for ticket in tickets %}
             <div class="post">
-                <h3 class="title">{{ ticket.title }}</h3>
-                <p class="description">{{ ticket.description }}</p>
-                <img id="book-image" class="book-image" src="{{ ticket.photo.image.url }}">
-                <p class="link-text"><a href="{% url 'create_review' ticket.id %}">Créez une critique</a></p>
+                <div class="post-description">
+                    <h3 class="title">{{ ticket.title }}</h3>
+                    <p class="description">{{ ticket.description }}</p>
+                    <img id="book-image" class="book-image" src="{{ ticket.photo.image.url }}">
+                    <p class="link-text"><a href="{% url 'create_review' ticket.id %}">Créez une critique</a></p>
+                </div>
+                {% for review in reviews %}
+                    {% if review.ticket == ticket %}
+                        <div class="review">
+                            {% if review.user == ticket.user %}
+                                <h4 class="user">Critique faite par vous</h4>
+                            {% else %}
+                                <h4 class="user">Critique faite par {{ username }}</h4>
+                            {% endif %}
+                            <br>
+                            <p class="critique">{{ review.headline }}</p>
+                            <p class="rating">Raiting : {{ review.rating }}</p>
+                            <p class="comment">{{ review.body }}</p>
+                            <p class="link-text"><a href="{% url 'edit_review' review.id %}">Modifier/Supprimer la critique</a></p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             </div>
         {% endfor %}
 
