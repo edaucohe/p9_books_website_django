@@ -4,6 +4,7 @@ from django import forms
 from . import models
 
 
+# Signing forms
 class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
@@ -15,13 +16,13 @@ class SignInForm(forms.Form):
     password = forms.CharField(max_length=50, widget=forms.PasswordInput, label="Mot de passe")
 
 
+# Ticket Forms
 class PhotoForm(forms.ModelForm):
     class Meta:
         model = models.Photo
         fields = ('image',)
 
 
-# Ticket Forms
 class TicketForm(forms.ModelForm):
     edit_ticket = forms.BooleanField(widget=forms.HiddenInput, initial=True)
 
@@ -45,3 +46,10 @@ class ReviewForm(forms.ModelForm):
 
 class DeleteReviewForm(forms.Form):
     delete_review = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+
+# Follow forms
+class FollowUsersForm(forms.ModelForm):
+    class Meta:
+        model = models.UserFollows
+        fields = ['followed_user']

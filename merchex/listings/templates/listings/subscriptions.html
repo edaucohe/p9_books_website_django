@@ -1,0 +1,15 @@
+{% extends 'listings/base.html' %}
+
+{% block content %}
+
+    <h1>Abonnements</h1>
+    <br>
+    <p>Suivez d'autres utilisateurs !</p>
+
+    <form method="post">
+        {{ followed_form.as_p }}
+        <button type="submit" >Confirmer</button>
+    </form>
+
+
+{% endblock %}

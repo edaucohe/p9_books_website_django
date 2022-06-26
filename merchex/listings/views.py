@@ -249,3 +249,17 @@ def edit_review(request, review_id):
         'delete_form': delete_form,
     }
     return render(request, 'listings/edit_review.html', context=forms_as_context)
+
+
+@login_required
+def subscriptions(request):
+    followed_form = forms.FollowUsersForm(instance=request.user)
+
+    if request.method == 'POST':
+        followed_form = forms.FollowUsersForm(request.POST, instance=request.user)
+
+        if followed_form.is_valid():
+            followed_form.save()
+            return redirect('dashboard')
+
+    return render(request, 'listings/subscriptions.html', context={'followed_form': followed_form})
