@@ -253,8 +253,15 @@ def edit_review(request, review_id):
 
 @login_required
 def subscriptions(request):
-    followed_form = forms.FollowUsersForm(instance=request.user)
+    followed_user_objects = models.UserFollows.objects.all()
+    # current_user = models.UserFollows.objects.get(pk=request.user.id)
+    # followed_users = models.UserFollows.objects.filter(followed_user__followed_by=current_user)
+    my_followed_user_objects = []
+    for followed_user_object in followed_user_objects:
+        if followed_user_object.user == request.user:
+            my_followed_user_objects.append(followed_user_object)
 
+    followed_form = forms.FollowUsersForm(instance=request.user)
     if request.method == 'POST':
         followed_form = forms.FollowUsersForm(request.POST, instance=request.user)
 
@@ -262,4 +269,10 @@ def subscriptions(request):
             followed_form.save()
             return redirect('dashboard')
 
-    return render(request, 'listings/subscriptions.html', context={'followed_form': followed_form})
+    models_as_context = {
+        'request_user': request.user,
+        'followed_user_objects': my_followed_user_objects,
+        'followed_form': followed_form
+    }
+
+    return render(request, 'listings/subscriptions.html', context=models_as_context)
