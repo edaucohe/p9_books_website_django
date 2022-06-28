@@ -253,13 +253,17 @@ def edit_review(request, review_id):
 
 @login_required
 def subscriptions(request):
-    followed_user_objects = models.UserFollows.objects.all()
-    # current_user = models.UserFollows.objects.get(pk=request.user.id)
-    # followed_users = models.UserFollows.objects.filter(followed_user__followed_by=current_user)
-    my_followed_user_objects = []
-    for followed_user_object in followed_user_objects:
-        if followed_user_object.user == request.user:
-            my_followed_user_objects.append(followed_user_object)
+    all_followed_user_objects = models.UserFollows.objects.all()
+
+    followed_user_objects = []
+    for every_followed_user_object in all_followed_user_objects:
+        if every_followed_user_object.user == request.user:
+            followed_user_objects.append(every_followed_user_object)
+
+    follower_user_objects = []
+    for every_followed_user_object in all_followed_user_objects:
+        if every_followed_user_object.followed_user == request.user:
+            follower_user_objects.append(every_followed_user_object)
 
     followed_form = forms.FollowUsersForm(instance=request.user)
     if request.method == 'POST':
@@ -271,7 +275,8 @@ def subscriptions(request):
 
     models_as_context = {
         'request_user': request.user,
-        'followed_user_objects': my_followed_user_objects,
+        'followed_user_objects': followed_user_objects,
+        'follower_user_objects': follower_user_objects,
         'followed_form': followed_form
     }
 

@@ -21,6 +21,13 @@
             </div>
         {% endfor %}
 
+        <h3 class="title">Mes abonnés</h3>
+        {% for follower_user_object in follower_user_objects %}
+            <div class="post">
+                <p class="user_follow">{{ follower_user_object.user }} | {{ follower_user_object.followed_user }}</p>
+            </div>
+        {% endfor %}
+
     </div>
 
 {% endblock %}
