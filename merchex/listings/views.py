@@ -253,31 +253,48 @@ def edit_review(request, review_id):
 
 @login_required
 def subscriptions(request):
-    all_followed_user_objects = models.UserFollows.objects.all()
+    my_follows = models.UserFollows.objects.filter(user=request.user)
+    my_followers = models.UserFollows.objects.filter(followed_user=request.user)
 
-    followed_user_objects = []
-    for every_followed_user_object in all_followed_user_objects:
-        if every_followed_user_object.user == request.user:
-            followed_user_objects.append(every_followed_user_object)
+    # id_current_user = request.user.id
+    # username_current_user = request.user.username
+    # current_user = request.user
+    #
+    # users_follows = models.UserFollows.objects.all()
+    # user_follow = [user_follow for user_follow in users_follows]
+    # user_follow_id = [user_follow.id for user_follow in users_follows]
+    #
+    # user_follow_user = [user_follow.user for user_follow in users_follows]
+    # user_follow_user_id = [user_follow.user.id for user_follow in users_follows]
+    # user_follow_user_username = [user_follow.user.username for user_follow in users_follows]
+    #
+    # user_follow_followed_user = [user_follow.followed_user for user_follow in users_follows]
+    # user_follow_followed_user_id = [user_follow.followed_user.id for user_follow in users_follows]
+    # user_follow_followed_user_username = [user_follow.followed_user.username for user_follow in users_follows]
 
-    follower_user_objects = []
-    for every_followed_user_object in all_followed_user_objects:
-        if every_followed_user_object.followed_user == request.user:
-            follower_user_objects.append(every_followed_user_object)
-
-    followed_form = forms.FollowUsersForm(instance=request.user)
+    message = ""
+    followed_form = forms.FollowUsersForm()
     if request.method == 'POST':
-        followed_form = forms.FollowUsersForm(request.POST, instance=request.user)
+        # followed_user_post_username = request.POST.get('followed_user', False)
+        # user_to_follow_from_post = models.User.objects.get(username=followed_user_post_username)
+        followed_user_post_id = int(request.POST.get('followed_user', False))
+        user_to_follow_from_post = models.User.objects.get(id=followed_user_post_id)
+        # followed_form = forms.FollowUsersForm(request.POST, {'followed_user': user_to_follow_from_post})
+        followed_form = forms.FollowUsersForm(request.POST)
 
         if followed_form.is_valid():
-            followed_form.save()
-            return redirect('dashboard')
+            follow_form = followed_form.save(commit=False)
+            follow_form.user = request.user
+            follow_form.followed_user = user_to_follow_from_post
+            follow_form.save()
+            message = "Abonnement réussi !"
 
     models_as_context = {
         'request_user': request.user,
-        'followed_user_objects': followed_user_objects,
-        'follower_user_objects': follower_user_objects,
-        'followed_form': followed_form
+        'followed_user_objects': my_follows,
+        'follower_user_objects': my_followers,
+        'followed_form': followed_form,
+        'message': message,
     }
 
     return render(request, 'listings/subscriptions.html', context=models_as_context)
