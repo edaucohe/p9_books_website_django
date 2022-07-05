@@ -7,25 +7,51 @@
     <p>Bienvenue {{ username }} !</p>
     <br>
     <p><a href="{% url 'tickets' %}">Créez un billet</a></p>
+    <h3 class="title">{{ follows_tickets }}</h3>
     <div class="grid-container">
+        {% for follow_tickets in follows_tickets %}
+        <h3 class="title">{{ follow_tickets }}</h3>
+            {% for follow_ticket in follow_tickets %}
+                <div class="post">
+                    <div class="post-description">
+                        {% if follow_ticket.user == username %}
+                            <h5 class="user">Billet fait par vous</h5>
+                        {% else %}
+                            <h5 class="user">Billet fait par {{ follow_ticket.user }}</h5>
+                        {% endif %}
+                        <br>
+                        <h3 class="title">{{ follow_ticket.title }}</h3>
+                        <p class="description">{{ follow_ticket.description }}</p>
+                        <img class="book-image" src="{{ follow_ticket.photo.image.url }}">
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         {% for ticket in tickets %}
             <div class="post">
                 <div class="post-description">
+                    {% if ticket.user.username == username %}
+                        <h5 class="user">Billet fait par vous</h5>
+                    {% else %}
+                        <h5 class="user">Billet fait par {{ ticket.user }}</h5>
+                    {% endif %}
+                    <br>
                     <h3 class="title">{{ ticket.title }}</h3>
                     <p class="description">{{ ticket.description }}</p>
                     <img id="book-image" class="book-image" src="{{ ticket.photo.image.url }}">
                     <p class="link-text"><a href="{% url 'create_review' ticket.id %}">Créez une critique</a></p>
                 </div>
+
                 {% for review in reviews %}
                     {% if review.ticket == ticket %}
                         <div class="review">
                             {% if review.user == ticket.user %}
-                                <h4 class="user">Critique faite par vous</h4>
+                                <h5 class="user">Critique faite par vous</h5>
                             {% else %}
-                                <h4 class="user">Critique faite par {{ username }}</h4>
+                                <h5 class="user">Critique faite par {{ username }}</h5>
                             {% endif %}
-                            <br>
-                            <p class="critique">{{ review.headline }}</p>
+                            <h3 class="critique">{{ review.headline }}</h3>
                             <p class="rating">Raiting : {{ review.rating }}</p>
                             <p class="comment">{{ review.body }}</p>
                             <p class="link-text"><a href="{% url 'edit_review' review.id %}">Modifier/Supprimer la critique</a></p>
