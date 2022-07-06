@@ -92,27 +92,48 @@ def sign(request):
 @login_required
 def flux(request):
     user = request.user
-    tickets = models.Ticket.objects.filter(Q(user=request.user))
-    photos = models.Photo.objects.filter(Q(uploader=request.user))
-    reviews = models.Review.objects.filter(Q(user=request.user))
+    # SELECT tickets.*, photo.*
+    # FROM tickets
+    # LEFT OUTER JOIN photos ON tickets.photo_id = photos.id
+    # WHERE user_id = 5
+    #       tickets.id, tickets.user_id , ..., photos.id, photos.url
+    # 1     1         , 5               ,...., null     , null
+    # 2     3         , 5               ,...., 1        , 'https://......'
 
-    my_followers = models.UserFollows.objects.filter(followed_user=request.user)
-    follows_tickets = []
-    follows_reviews = []
-    follows_photos = []
-    for my_follower in my_followers:
-        follows_tickets.append(models.Ticket.objects.filter(Q(user=my_follower.user)))
-        follows_photos.append(models.Photo.objects.filter(Q(uploader=my_follower.user)))
-        follows_reviews.append(models.Review.objects.filter(Q(user=my_follower.user)))
+    # Ticket(id=1, ..., photo=null)
+    # Ticket(id=3, ..., photo=Photo(id=1, url='https://....'))
+
+    # SELECT * FROM tickets WHERE user_id = 5  -> [Ticket(id=1,...), Ticket(id=3, ....)]
+    # ticket.photo for ticket in tickets
+    #   SELECT * FROM photos WHERE id=<photo_id>
+
+    tickets = list(models.Ticket.objects.filter(Q(user=user)))
+    reviews = list(models.Review.objects.filter(Q(user=user)))
+
+    followed_users = models.UserFollows.objects.filter(user=user)
+    followed_user_ids = [u.followed_user.id for u in followed_users]
+    follows_tickets = list(models.Ticket.objects.filter(user__id__in=followed_user_ids))
+    follows_reviews = list(models.Review.objects.filter(user__id__in=followed_user_ids))
+
+    all_reviews = reviews + follows_reviews
+    all_tickets = tickets + follows_tickets
+    ticket_ids_with_review = {review.ticket.id for review in all_reviews}
+
+    # Remove redundant posts (like tickets with an existing review)
+    all_posts = all_reviews + all_tickets
+    all_posts = sorted(all_posts, key=lambda x: x.time_created, reverse=True)
+    # for followed_user in followed_users:
+    #     follows_tickets.append())
+    #     follows_photos.append(models.Photo.objects.filter(Q(uploader=followed_user.user)))
 
     models_as_context = {
         'username': user,
-        'tickets': tickets,
-        'photos': photos,
-        'reviews': reviews,
-        'follows_tickets': follows_tickets,
-        'follows_photos': follows_photos,
-        'follows_reviews': follows_reviews,
+        'all_posts': all_posts,
+        'ticket_ids_with_review': ticket_ids_with_review
+        # 'tickets': tickets,
+        # 'reviews': reviews,
+        # 'follows_tickets': follows_tickets,
+        # 'follows_reviews': follows_reviews,
     }
     return render(request, 'listings/flux.html', context=models_as_context)
 

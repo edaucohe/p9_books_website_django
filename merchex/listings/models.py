@@ -17,6 +17,7 @@ class Photo(models.Model):
 
 
 class Ticket(models.Model):
+    TYPE = 'ticket'
     # Your Ticket model definition goes here
     title = models.CharField(max_length=128)  # default='')
     description = models.TextField(max_length=2048)  # default='')
