@@ -28,7 +28,7 @@ urlpatterns = [
     # path('sign/', views.sign, name='sign'),
     path('sign_up/', views.sign_up, name='sign-up'),
     path('sign_in/', views.sign_in, name='sign-in'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('flux/', views.flux, name='flux'),
     path('posts/', views.posts, name='posts'),
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('tickets/', views.create_tickets, name='tickets'),
@@ -37,6 +37,7 @@ urlpatterns = [
     path('review/<int:ticket_id>/create/', views.create_review, name='create_review'),
     path('reviews/', views.show_reviews, name='reviews'),
     path('review/<int:review_id>/edit/', views.edit_review, name='edit_review'),
+    # path('subscriptions/<int:subscription_id>/delete/', views.delete_subscription, name='delete_subscription'),
 ]
 
 if settings.DEBUG:

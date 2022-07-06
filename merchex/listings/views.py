@@ -27,7 +27,7 @@ def sign_up(request):
             user = form.save()
             if user is not None:
                 login(request, user)
-                return redirect('dashboard')
+                return redirect('flux')
 
     else:
         form = forms.SignUpForm()
@@ -48,7 +48,7 @@ def sign_in(request):
             )
             if user is not None:
                 login(request, user)
-                return redirect('dashboard')
+                return redirect('flux')
 
     else:
         form = forms.SignInForm()
@@ -68,7 +68,7 @@ def sign(request):
                 user = sign_up_form.save()
                 if user is not None:
                     login(request, user)
-                    return redirect('dashboard')
+                    return redirect('flux')
 
         # Sign in form
         elif 'sign_in_btn' in request.POST:
@@ -80,7 +80,7 @@ def sign(request):
                 )
                 if sign_in_user is not None:
                     login(request, sign_in_user)
-                    return redirect('dashboard')
+                    return redirect('flux')
 
     else:
         sign_up_form = forms.SignUpForm()
@@ -90,28 +90,31 @@ def sign(request):
 
 
 @login_required
-def dashboard(request):
-    username = request.user.username
-    tickets = models.Ticket.objects.filter(Q(user__username__iexact=username))
-    photos = models.Photo.objects.filter(Q(uploader__username__iexact=username))
-    reviews = models.Review.objects.filter(Q(user__username__iexact=username))
+def flux(request):
+    user = request.user
+    tickets = models.Ticket.objects.filter(Q(user=request.user))
+    photos = models.Photo.objects.filter(Q(uploader=request.user))
+    reviews = models.Review.objects.filter(Q(user=request.user))
 
     my_followers = models.UserFollows.objects.filter(followed_user=request.user)
     follows_tickets = []
+    follows_reviews = []
     follows_photos = []
     for my_follower in my_followers:
         follows_tickets.append(models.Ticket.objects.filter(Q(user=my_follower.user)))
         follows_photos.append(models.Photo.objects.filter(Q(uploader=my_follower.user)))
+        follows_reviews.append(models.Review.objects.filter(Q(user=my_follower.user)))
 
     models_as_context = {
-        'username': username,
+        'username': user,
         'tickets': tickets,
         'photos': photos,
         'reviews': reviews,
         'follows_tickets': follows_tickets,
         'follows_photos': follows_photos,
+        'follows_reviews': follows_reviews,
     }
-    return render(request, 'listings/dashboard.html', context=models_as_context)
+    return render(request, 'listings/flux.html', context=models_as_context)
 
 
 # @login_required
@@ -147,7 +150,7 @@ def create_tickets(request):
             ticket.photo = photo
             ticket.save()
 
-            return redirect('dashboard')
+            return redirect('flux')
 
     forms_as_context = {
         'ticket_form': ticket_form,
@@ -168,14 +171,14 @@ def edit_ticket(request, ticket_id):
 
             if edit_form.is_valid():
                 edit_form.save()
-                return redirect('dashboard')
+                return redirect('flux')
 
         if 'delete_ticket' in request.POST:
             delete_form = forms.DeleteTicketForm(request.POST)
 
             if delete_form.is_valid():
                 ticket.delete()
-                return redirect('dashboard')
+                return redirect('flux')
 
     forms_as_context = {
         'edit_form': edit_form,
@@ -215,7 +218,7 @@ def create_review(request, ticket_id):
             review.ticket = ticket
             review.save()
 
-            return redirect('dashboard')
+            return redirect('flux')
 
     return render(request, 'listings/create_review.html', context={'review_form': review_form})
 
@@ -244,14 +247,14 @@ def edit_review(request, review_id):
 
             if review_form.is_valid():
                 review_form.save()
-                return redirect('dashboard')
+                return redirect('flux')
 
         if 'delete_review' in request.POST:
             delete_form = forms.DeleteReviewForm(request.POST)
 
             if delete_form.is_valid():
                 review.delete()
-                return redirect('dashboard')
+                return redirect('flux')
 
     forms_as_context = {
         'edit_form': review_form,
@@ -265,21 +268,21 @@ def subscriptions(request):
     my_follows = models.UserFollows.objects.filter(user=request.user)
     my_followers = models.UserFollows.objects.filter(followed_user=request.user)
 
-    id_current_user = request.user.id
-    username_current_user = request.user.username
-    current_user = request.user
-
-    users_follows = models.UserFollows.objects.all()
-    user_follow = [user_follow for user_follow in users_follows]
-    user_follow_id = [user_follow.id for user_follow in users_follows]
-
-    user_follow_user = [user_follow.user for user_follow in users_follows]
-    user_follow_user_id = [user_follow.user.id for user_follow in users_follows]
-    user_follow_user_username = [user_follow.user.username for user_follow in users_follows]
-
-    user_follow_followed_user = [user_follow.followed_user for user_follow in users_follows]
-    user_follow_followed_user_id = [user_follow.followed_user.id for user_follow in users_follows]
-    user_follow_followed_user_username = [user_follow.followed_user.username for user_follow in users_follows]
+    # id_current_user = request.user.id
+    # username_current_user = request.user.username
+    # current_user = request.user
+    #
+    # users_follows = models.UserFollows.objects.all()
+    # user_follow = [user_follow for user_follow in users_follows]
+    # user_follow_id = [user_follow.id for user_follow in users_follows]
+    #
+    # user_follow_user = [user_follow.user for user_follow in users_follows]
+    # user_follow_user_id = [user_follow.user.id for user_follow in users_follows]
+    # user_follow_user_username = [user_follow.user.username for user_follow in users_follows]
+    #
+    # user_follow_followed_user = [user_follow.followed_user for user_follow in users_follows]
+    # user_follow_followed_user_id = [user_follow.followed_user.id for user_follow in users_follows]
+    # user_follow_followed_user_username = [user_follow.followed_user.username for user_follow in users_follows]
 
     message = ""
     followed_form = forms.FollowUsersForm()
