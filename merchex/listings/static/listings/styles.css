@@ -112,8 +112,13 @@ section{
 .post .book-image{
   position: absolute;
   top: 25px;
-  right: 25px;
+  left: 25px;
   max-height: 200px;
+}
+.post .time{
+  position: absolute;
+  right: 25px;
+  top: 0px;
 }
 
 .post-description{
@@ -140,7 +145,12 @@ section{
 .review .user{
   position: absolute;
   left: 25px;
-  top: 20px;
+  top: 0px;
+}
+.review .time{
+  position: absolute;
+  right: 25px;
+  top: 0px;
 }
 .review .critique{
   position: absolute;
