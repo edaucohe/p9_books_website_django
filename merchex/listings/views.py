@@ -108,7 +108,13 @@ def flux(request):
     #   SELECT * FROM photos WHERE id=<photo_id>
 
     tickets = list(models.Ticket.objects.filter(Q(user=user)))
-    reviews = list(models.Review.objects.filter(Q(user=user)))
+    # if user:
+    #     reviews = list(models.Review.objects.filter(Q(user=user)))
+    # else:
+    reviews = []
+    for ticket in tickets:
+        reviews = list(models.Review.objects.filter(Q(ticket=ticket)))
+    reviews += list(models.Review.objects.filter(Q(user=user)))
 
     followed_users = models.UserFollows.objects.filter(user=user)
     followed_user_ids = [u.followed_user.id for u in followed_users]
@@ -117,7 +123,7 @@ def flux(request):
 
     all_reviews = reviews + follows_reviews
     all_tickets = tickets + follows_tickets
-    ticket_ids_with_review = {review.ticket.id for review in all_reviews}
+    ticket_ids_with_review = {review.ticket for review in all_reviews}
 
     # Remove redundant posts (like tickets with an existing review)
     all_posts = all_reviews + all_tickets
@@ -129,9 +135,9 @@ def flux(request):
     models_as_context = {
         'username': user,
         'all_posts': all_posts,
-        'ticket_ids_with_review': ticket_ids_with_review
+        'ticket_ids_with_review': ticket_ids_with_review,
         # 'tickets': tickets,
-        # 'reviews': reviews,
+        'reviews': reviews
         # 'follows_tickets': follows_tickets,
         # 'follows_reviews': follows_reviews,
     }
@@ -156,26 +162,27 @@ def flux(request):
 @login_required
 def create_tickets(request):
     ticket_form = forms.TicketForm()
-    photo_form = forms.PhotoForm()
+    # photo_form = forms.PhotoForm()
     if request.method == 'POST':
         # handle the POST request here
         ticket_form = forms.TicketForm(request.POST)
-        photo_form = forms.PhotoForm(request.POST, request.FILES)
-        if all([ticket_form.is_valid(), photo_form.is_valid()]):
-            photo = photo_form.save(commit=False)
-            photo.uploader = request.user
-            photo.save()
+        # photo_form = forms.PhotoForm(request.POST, request.FILES)
+        # if all([ticket_form.is_valid(), photo_form.is_valid()]):
+        if ticket_form.is_valid():
+            # photo = photo_form.save(commit=False)
+            # photo.uploader = request.user
+            # photo.save()
 
             ticket = ticket_form.save(commit=False)
             ticket.user = request.user
-            ticket.photo = photo
+            # ticket.photo = photo
             ticket.save()
 
             return redirect('flux')
 
     forms_as_context = {
         'ticket_form': ticket_form,
-        'photo_form': photo_form,
+        # 'photo_form': photo_form,
     }
     return render(request, 'listings/tickets.html', context=forms_as_context)
 
@@ -307,24 +314,36 @@ def subscriptions(request):
 
     message = ""
     followed_form = forms.FollowUsersForm()
+    # delete_form = forms.DeleteSubscriptionForm()
     if 'followed_user' in request.POST:
         # followed_user_post_username = request.POST.get('followed_user', False)
         # user_to_follow_from_post = models.User.objects.get(username=followed_user_post_username)
-        followed_user_post_id = int(request.POST.get('followed_user', False))
-        user_to_follow_from_post = models.User.objects.get(id=followed_user_post_id)
-        # followed_form = forms.FollowUsersForm(request.POST, {'followed_user': user_to_follow_from_post})
-        followed_form = forms.FollowUsersForm(request.POST)
+        if request.POST.get('followed_user', False) == "":
+            message = "Choisissez un utilisateur, svp."
+        else:
+            followed_user_post_id = int(request.POST.get('followed_user', False))
 
-        # if all([followed_form.is_valid(), delete_form.is_valid()]):
-        if followed_form.is_valid():
-            follow_form = followed_form.save(commit=False)
-            follow_form.user = request.user
-            follow_form.followed_user = user_to_follow_from_post
-            follow_form.save()
-            message = "Abonnement réussi !"
+            if followed_user_post_id == request.user.id:
+                message = "Vous ne pouvez pas vous choisir vous-même ! Choisissez un autre utilisateur, svp."
+            elif followed_user_post_id in [my_follow.followed_user.id for my_follow in my_follows]:
+                message = "Utilisateur déjà suivi ! Choisissez un autre utilisateur, svp."
+            else:
 
-    # if 'delete_subscription' in request.POST:
+                user_to_follow_from_post = models.User.objects.get(id=followed_user_post_id)
+                # followed_form = forms.FollowUsersForm(request.POST, {'followed_user': user_to_follow_from_post})
+                followed_form = forms.FollowUsersForm(request.POST)
+
+                # if all([followed_form.is_valid(), delete_form.is_valid()]):
+                if followed_form.is_valid():
+                    follow_form = followed_form.save(commit=False)
+                    follow_form.user = request.user
+                    follow_form.followed_user = user_to_follow_from_post
+                    follow_form.save()
+                    message = "Abonnement réussi !"
+
+    # elif 'delete_subscription' in request.POST:
     #     # for my_follower in my_followers:
+    #     delete_form = forms.DeleteSubscriptionForm(request.POST)
     #     if delete_form.is_valid():
     #         delete_form.delete()
     #         message = "Désabonnement réussi !"

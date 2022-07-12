@@ -27,6 +27,7 @@ class Ticket(models.Model):
 
 
 class Review(models.Model):
+    TYPE = 'review'
     ticket = models.ForeignKey(to=Ticket, on_delete=models.CASCADE, null=True, blank=True)
     # validates that rating must be between 0 and 5
     rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
