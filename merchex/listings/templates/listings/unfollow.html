@@ -1,0 +1,11 @@
+{% extends 'listings/base.html' %}
+
+{% block content %}
+
+    <h2>Êtes-vous sûr(e) de vous désabonner de {{ follow.followed_user }} ?</h2>
+    <form method="post">
+        {{ delete_form }}
+        <button type="submit" >Oui, j'en suis sûr(e)</button>
+    </form>
+
+{% endblock content %}

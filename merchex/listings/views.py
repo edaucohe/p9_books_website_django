@@ -360,18 +360,20 @@ def subscriptions(request):
     return render(request, 'listings/subscriptions.html', context=models_as_context)
 
 
-# @login_required
-# def delete_subscription(request, subscription_id):
-#     follow = get_object_or_404(models.UserFollows, id=subscription_id)
-#     delete_form = forms.DeleteReviewForm()
-#
-#     if 'delete_subscription' in request.POST:
-#         delete_form = forms.DeleteSubscriptionForm(request.POST)
-#
-#         if delete_form.is_valid():
-#             follow.delete()
-#
-#     forms_as_context = {
-#         'delete_form': delete_form,
-#     }
-#     return render(request, 'listings/delete_subscription.html', context=forms_as_context)
+@login_required
+def unfollow(request, unfollow_id):
+    follow = get_object_or_404(models.UserFollows, id=unfollow_id)
+    delete_form = forms.DeleteSubscriptionForm()
+
+    if request.method == 'POST':
+        delete_form = forms.DeleteSubscriptionForm(request.POST)
+
+        if delete_form.is_valid():
+            follow.delete()
+            return redirect('flux')
+
+    forms_as_context = {
+        'delete_form': delete_form,
+        'follow': follow,
+    }
+    return render(request, 'listings/unfollow.html', context=forms_as_context)
