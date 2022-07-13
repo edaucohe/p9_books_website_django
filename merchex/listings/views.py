@@ -111,10 +111,9 @@ def flux(request):
     # if user:
     #     reviews = list(models.Review.objects.filter(Q(user=user)))
     # else:
-    reviews = []
-    for ticket in tickets:
-        reviews = list(models.Review.objects.filter(Q(ticket=ticket)))
-    reviews += list(models.Review.objects.filter(Q(user=user)))
+    ticket_ids = [t.id for t in tickets]
+    # HOW TO django query avec une condition OU
+    reviews = list(models.Review.objects.filter(Q(ticket__id__in=ticket_ids) | Q(user=user)))
 
     followed_users = models.UserFollows.objects.filter(user=user)
     followed_user_ids = [u.followed_user.id for u in followed_users]
