@@ -8,12 +8,12 @@
     <br>
     <p><a href="{% url 'tickets' %}">Demandez une critique !</a></p>
     <div class="grid-container">
-        <p>all_posts : {{ all_posts }}</p>
-        <p>ticket_ids_with_review : {{ ticket_ids_with_review }}</p>
-        <p>reviews : {{ reviews }}</p>
+<!--        <p>all_posts : {{ all_posts }}</p>-->
+<!--        <p>ticket_ids_with_review : {{ ticket_ids_with_review }}</p>-->
+<!--        <p>reviews : {{ reviews }}</p>-->
         {% for post in all_posts %}
-            <p>{{ post }}</p>
-            <p>{{ post.time_created }}</p>
+<!--            <p>{{ post }}</p>-->
+<!--            <p>{{ post.time_created }}</p>-->
 
 
 <!--                <div class="post ticket">-->
@@ -36,7 +36,7 @@
 <!--                </div>-->
             {% if post.TYPE == 'review' %}
 <!--                <div class="post review">-->
-                <p>Review: {{ post }}</p>
+<!--                <p>Review: {{ post }}</p>-->
 <!--                    <div class="post-description">-->
 <!--                        {% if post.user.username == user.username %}-->
 <!--                            <h5 class="user">Critique faite par vous</h5>-->
@@ -51,12 +51,12 @@
 <!--    &lt;!&ndash;                    <p class="link-text"><a href="{% url 'create_review' post.id %}">Créez une critique</a></p>&ndash;&gt;-->
 <!--                    </div>-->
 
-                <p class="rating">ticket de la critique : {{ post.ticket }}</p>
+<!--                <p class="rating">ticket de la critique : {{ post.ticket }}</p>-->
                 {% for ticket_id_with_review in ticket_ids_with_review %}
                     {% if post.ticket == ticket_id_with_review %}
-                        <p class="comment">if condition critique : {{ post }}</p>
+<!--                        <p class="comment">if condition critique : {{ post }}</p>-->
                         <br>
-                        <p class="link-text">if condition ticket : {{ post.ticket }}</p>
+<!--                        <p class="link-text">if condition ticket : {{ post.ticket }}</p>-->
                         <div class="post ticket">
                             <div class="post-description">
                                 {% if post.ticket.user.username == user.username %}
@@ -77,7 +77,7 @@
 
                             </div>
                             <div class="post review">
-                                <p>Critique : {{ post }}</p>
+<!--                                <p>Critique : {{ post }}</p>-->
                                 <div class="post-description">
                                     {% if post.user.username == user.username %}
                                         <h5 class="user">Critique faite par vous</h5>
@@ -113,8 +113,8 @@
 <!--                </div>-->
             {% else %}
                 <div class="post ticket">
-                    <p>Ticket: {{ post }}</p>
-                    <p>ticket_ids_with_review {{ ticket_ids_with_review }}</p>
+<!--                    <p>Ticket: {{ post }}</p>-->
+<!--                    <p>ticket_ids_with_review {{ ticket_ids_with_review }}</p>-->
                     <div class="post-description">
                         {% if post.user.username == user.username %}
                             <h5 class="user">Vous avez demandé une critique</h5>
