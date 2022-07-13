@@ -170,8 +170,14 @@ section{
 }
 .review .link-text{
   position: absolute;
-  left: 25px;
-  bottom: 25px;
+  right: 25px;
+  bottom: 55px;
+}
+
+.unfollow{
+  position: absolute;
+  right: 25px;
+  top: 10px;
 }
 
 /* forms */
