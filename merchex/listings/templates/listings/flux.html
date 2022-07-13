@@ -27,7 +27,7 @@
 <!--                        <br>-->
 <!--                        <h3 class="title">{{ post.title }}</h3>-->
 <!--                        <p class="description">{{ post.description }}</p>-->
-<!--                        <img class="book-image" src="{{ post.photo.image.url }}">-->
+
 
 <!--&lt;!&ndash;                        {# if ticket not in ticket_ids_with_review #}&ndash;&gt;-->
 <!--&lt;!&ndash;                            <p class="link-text"><a href="{% url 'create_review' post.id %}">Créez une critique</a></p>&ndash;&gt;-->
@@ -68,6 +68,9 @@
                                 <br>
                                 <h3 class="title">{{ post.ticket.title }}</h3>
                                 <p class="description">{{ post.ticket.description }}</p>
+                                {% if post.photo.image %}
+                                    <img class="book-image" src="{{ post.ticket.photo.image.url }}">
+                                {% endif %}
 
     <!--                            <img class="book-image" src="{{ post.photo.image.url }}">-->
 
@@ -125,7 +128,9 @@
                         <br>
                         <h3 class="title">{{ post.title }}</h3>
                         <p class="description">{{ post.description }}</p>
-                        <img class="book-image" src="{{ post.photo.image.url }}">
+                        {% if post.photo.image %}
+                            <img class="book-image" src="{{ post.photo.image.url }}">
+                        {% endif %}
                         {% if not ticket_ids_with_review %}
                             <p class="link-text"><a href="{% url 'create_review' post.id %}">Créez une critique</a></p>
                         {% else %}

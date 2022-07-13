@@ -23,6 +23,8 @@ class SignInForm(forms.Form):
 
 # Ticket Forms
 class PhotoForm(forms.ModelForm):
+    image = forms.ImageField(required=False)
+
     class Meta:
         model = models.Photo
         fields = ('image',)

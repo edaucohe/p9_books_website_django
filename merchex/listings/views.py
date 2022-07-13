@@ -161,27 +161,27 @@ def flux(request):
 @login_required
 def create_tickets(request):
     ticket_form = forms.TicketForm()
-    # photo_form = forms.PhotoForm()
+    photo_form = forms.PhotoForm()
     if request.method == 'POST':
         # handle the POST request here
         ticket_form = forms.TicketForm(request.POST)
-        # photo_form = forms.PhotoForm(request.POST, request.FILES)
-        # if all([ticket_form.is_valid(), photo_form.is_valid()]):
-        if ticket_form.is_valid():
-            # photo = photo_form.save(commit=False)
-            # photo.uploader = request.user
-            # photo.save()
+        photo_form = forms.PhotoForm(request.POST, request.FILES)
+        if all([ticket_form.is_valid(), photo_form.is_valid()]):
+        # if ticket_form.is_valid():
+            photo = photo_form.save(commit=False)
+            photo.uploader = request.user
+            photo.save()
 
             ticket = ticket_form.save(commit=False)
             ticket.user = request.user
-            # ticket.photo = photo
+            ticket.photo = photo
             ticket.save()
 
             return redirect('flux')
 
     forms_as_context = {
         'ticket_form': ticket_form,
-        # 'photo_form': photo_form,
+        'photo_form': photo_form,
     }
     return render(request, 'listings/tickets.html', context=forms_as_context)
 
