@@ -112,7 +112,7 @@ section{
 .post .book-image{
   position: absolute;
   top: 25px;
-  left: 25px;
+  right: 25px;
   max-height: 200px;
 }
 .post .time{
