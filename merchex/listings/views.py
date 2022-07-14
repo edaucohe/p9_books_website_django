@@ -3,10 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 
-# Create your views here.
-# from django.views.decorators.csrf import csrf_protect
-# from listings.forms import SignUpForm, SignInForm
-# from . import forms
 from listings import forms
 from . import models
 
@@ -121,6 +117,7 @@ def flux(request):
     follows_reviews = list(models.Review.objects.filter(user__id__in=followed_user_ids))
 
     all_reviews = reviews + follows_reviews
+    all_reviews = list(set(all_reviews))
     all_tickets = tickets + follows_tickets
     ticket_ids_with_review = {review.ticket for review in all_reviews}
 
@@ -141,21 +138,6 @@ def flux(request):
         # 'follows_reviews': follows_reviews,
     }
     return render(request, 'listings/flux.html', context=models_as_context)
-
-
-# @login_required
-# def photo_upload(request):
-#     form = forms.PhotoForm()
-#     if request.method == 'POST':
-#         form = forms.PhotoForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             photo = form.save(commit=False)
-#             # set the uploader to the user before saving the model
-#             photo.uploader = request.user
-#             # now we can save
-#             photo.save()
-#             return redirect('home')
-#     return render(request, 'blog/photo_upload.html', context={'form': form})
 
 
 @login_required
@@ -295,28 +277,9 @@ def subscriptions(request):
     my_follows = models.UserFollows.objects.filter(user=request.user)
     my_followers = models.UserFollows.objects.filter(followed_user=request.user)
 
-    # id_current_user = request.user.id
-    # username_current_user = request.user.username
-    # current_user = request.user
-    #
-    # users_follows = models.UserFollows.objects.all()
-    # user_follow = [user_follow for user_follow in users_follows]
-    # user_follow_id = [user_follow.id for user_follow in users_follows]
-    #
-    # user_follow_user = [user_follow.user for user_follow in users_follows]
-    # user_follow_user_id = [user_follow.user.id for user_follow in users_follows]
-    # user_follow_user_username = [user_follow.user.username for user_follow in users_follows]
-    #
-    # user_follow_followed_user = [user_follow.followed_user for user_follow in users_follows]
-    # user_follow_followed_user_id = [user_follow.followed_user.id for user_follow in users_follows]
-    # user_follow_followed_user_username = [user_follow.followed_user.username for user_follow in users_follows]
-
     message = ""
     followed_form = forms.FollowUsersForm()
-    # delete_form = forms.DeleteSubscriptionForm()
     if 'followed_user' in request.POST:
-        # followed_user_post_username = request.POST.get('followed_user', False)
-        # user_to_follow_from_post = models.User.objects.get(username=followed_user_post_username)
         if request.POST.get('followed_user', False) == "":
             message = "Choisissez un utilisateur, svp."
         else:
@@ -327,12 +290,9 @@ def subscriptions(request):
             elif followed_user_post_id in [my_follow.followed_user.id for my_follow in my_follows]:
                 message = "Utilisateur déjà suivi ! Choisissez un autre utilisateur, svp."
             else:
-
                 user_to_follow_from_post = models.User.objects.get(id=followed_user_post_id)
-                # followed_form = forms.FollowUsersForm(request.POST, {'followed_user': user_to_follow_from_post})
                 followed_form = forms.FollowUsersForm(request.POST)
 
-                # if all([followed_form.is_valid(), delete_form.is_valid()]):
                 if followed_form.is_valid():
                     follow_form = followed_form.save(commit=False)
                     follow_form.user = request.user
@@ -340,19 +300,11 @@ def subscriptions(request):
                     follow_form.save()
                     message = "Abonnement réussi !"
 
-    # elif 'delete_subscription' in request.POST:
-    #     # for my_follower in my_followers:
-    #     delete_form = forms.DeleteSubscriptionForm(request.POST)
-    #     if delete_form.is_valid():
-    #         delete_form.delete()
-    #         message = "Désabonnement réussi !"
-
     models_as_context = {
         'request_user': request.user,
         'followed_user_objects': my_follows,
         'follower_user_objects': my_followers,
         'followed_form': followed_form,
-        # 'delete_form': delete_form,
         'message': message,
     }
 
