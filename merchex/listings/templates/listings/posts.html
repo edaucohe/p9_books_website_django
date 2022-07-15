@@ -10,6 +10,7 @@
             <div class="post">
                 <div class="post-description">
                     <h3 class="title">{{ ticket.title }}</h3>
+                    <h5 class="time">{{ ticket.time_created }}</h5>
                     <p class="description">{{ ticket.description }}</p>
                     {% if ticket.photo.image %}
                         <img class="book-image" src="{{ ticket.photo.image.url }}">

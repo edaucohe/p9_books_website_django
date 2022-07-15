@@ -3,8 +3,9 @@
 {% block content %}
 
     <h2>Modifier le billet</h2>
-    <form method="post">
+    <form method="post" novalidate enctype="multipart/form-data">
         {{ edit_form.as_p }}
+        {{ photo_form.as_p }}
 <!--        {% csrf_token %}-->
         <button type="submit" >Sauvegarder</button>
     </form>
@@ -13,6 +14,7 @@
     <h2>Supprimer le billet ?</h2>
     <form method="post">
         {{ delete_form }}
+        {{ delete_photo_form.as_p }}
 <!--        {% csrf_token %}-->
         <button type="submit" >Supprimer</button>
     </form>

@@ -11,10 +11,6 @@ class SignUpForm(UserCreationForm):
         fields = ('username',)
         labels = {'username': "Nom d'utilisateur "}
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['password'].label = 'Mot de passe '
-
 
 class SignInForm(forms.Form):
     username = forms.CharField(max_length=100, label="Nom d'utilisateur ")
@@ -28,6 +24,10 @@ class PhotoForm(forms.ModelForm):
     class Meta:
         model = models.Photo
         fields = ('image',)
+
+
+class DeletePhotoForm(forms.Form):
+    delete_photo = forms.BooleanField(widget=forms.HiddenInput, initial=True)
 
 
 class TicketForm(forms.ModelForm):
