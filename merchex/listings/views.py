@@ -1,3 +1,5 @@
+import os.path
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -169,29 +171,74 @@ def create_tickets(request):
 
 
 @login_required
+def create_ticket_for_review(request):
+    ticket_form = forms.TicketForm()
+    photo_form = forms.PhotoForm()
+    if request.method == 'POST':
+        # handle the POST request here
+        ticket_form = forms.TicketForm(request.POST)
+        photo_form = forms.PhotoForm(request.POST, request.FILES)
+        if all([ticket_form.is_valid(), photo_form.is_valid()]):
+        # if ticket_form.is_valid():
+            photo = photo_form.save(commit=False)
+            photo.uploader = request.user
+            photo.save()
+
+            ticket = ticket_form.save(commit=False)
+            ticket.user = request.user
+            ticket.photo = photo
+            ticket.save()
+
+            return redirect('create_review', ticket.id)
+
+    forms_as_context = {
+        'ticket_form': ticket_form,
+        'photo_form': photo_form,
+    }
+    return render(request, 'listings/ticket_for_review.html', context=forms_as_context)
+
+
+@login_required
 def edit_ticket(request, ticket_id):
     ticket = get_object_or_404(models.Ticket, id=ticket_id)
+    photo = ticket.photo
+
     edit_form = forms.TicketForm(instance=ticket)
+    photo_form = forms.PhotoForm(instance=photo)
     delete_form = forms.DeleteTicketForm()
+    delete_photo_form = forms.DeletePhotoForm()
 
     if request.method == 'POST':
         if 'edit_ticket' in request.POST:
             edit_form = forms.TicketForm(request.POST, instance=ticket)
+            photo_form = forms.PhotoForm(request.POST, request.FILES, instance=ticket.photo)
 
-            if edit_form.is_valid():
+            if all([edit_form.is_valid(), photo_form.is_valid()]):
                 edit_form.save()
+
+                if ticket.photo.image:
+                    photo_path = ticket.photo.image.path
+                    if os.path.exists(photo_path):
+                        os.remove(photo_path)
+
+                photo_form.save()
+
                 return redirect('flux')
 
         if 'delete_ticket' in request.POST:
             delete_form = forms.DeleteTicketForm(request.POST)
+            delete_photo_form = forms.DeletePhotoForm(request.POST)
 
             if delete_form.is_valid():
                 ticket.delete()
+                ticket.photo.delete()
                 return redirect('flux')
 
     forms_as_context = {
         'edit_form': edit_form,
+        'photo_form': photo_form,
         'delete_form': delete_form,
+        'delete_photo_form': delete_photo_form,
     }
     return render(request, 'listings/edit_ticket.html', context=forms_as_context)
 
@@ -201,6 +248,8 @@ def posts(request):
     username = request.user.username
     tickets = models.Ticket.objects.filter(Q(user__username__iexact=username))
     photos = models.Photo.objects.filter(Q(uploader__username__iexact=username))
+
+    tickets = sorted(tickets, key=lambda x: x.time_created, reverse=True)
 
     models_as_context = {
         'username': username,

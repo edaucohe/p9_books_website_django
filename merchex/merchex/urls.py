@@ -22,16 +22,14 @@ from listings import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', views.root, name='index'),
-    # path('', views.forms, name='forms'),
     path('', views.sign, name='sign'),
-    # path('sign/', views.sign, name='sign'),
     path('sign_up/', views.sign_up, name='sign-up'),
     path('sign_in/', views.sign_in, name='sign-in'),
     path('flux/', views.flux, name='flux'),
     path('posts/', views.posts, name='posts'),
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('tickets/', views.create_tickets, name='tickets'),
+    path('ticket_for_review/', views.create_ticket_for_review, name='ticket_for_review'),
     path('log_out/', views.log_out, name='log-out'),
     path('ticket/<int:ticket_id>/edit/', views.edit_ticket, name='edit_ticket'),
     path('review/<int:ticket_id>/create/', views.create_review, name='create_review'),

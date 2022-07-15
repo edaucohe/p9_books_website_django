@@ -6,7 +6,10 @@
     <br>
     <p>Bienvenue {{ user.username }} !</p>
     <br>
-    <p><a href="{% url 'tickets' %}">Demandez une critique !</a></p>
+    <div class="review-links">
+        <p class="review-link"><a href="{% url 'tickets' %}">Demandez une critique !</a></p>
+        <p class="review-link"><a href="{% url 'ticket_for_review' %}">Créez une critique !</a></p>
+    </div>
     <div class="grid-container">
         {% for post in all_posts %}
             {% if post.TYPE == 'review' %}
