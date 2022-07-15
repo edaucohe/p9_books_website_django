@@ -50,6 +50,17 @@ p a{
 p a:hover{
   text-decoration: underline;
 }
+.review-links{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.review-link{
+  float: left;
+  padding-left: 100px;
+  padding-right: 100px;
+}
 
 section{
   /* border: 2px solid #113c62; */
