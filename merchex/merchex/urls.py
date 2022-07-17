@@ -23,8 +23,6 @@ from listings import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.sign, name='sign'),
-    path('sign_up/', views.sign_up, name='sign-up'),
-    path('sign_in/', views.sign_in, name='sign-in'),
     path('flux/', views.flux, name='flux'),
     path('posts/', views.posts, name='posts'),
     path('subscriptions/', views.subscriptions, name='subscriptions'),
@@ -33,7 +31,6 @@ urlpatterns = [
     path('log_out/', views.log_out, name='log-out'),
     path('ticket/<int:ticket_id>/edit/', views.edit_ticket, name='edit_ticket'),
     path('review/<int:ticket_id>/create/', views.create_review, name='create_review'),
-    path('reviews/', views.show_reviews, name='reviews'),
     path('review/<int:review_id>/edit/', views.edit_review, name='edit_review'),
     path('unfollow/<int:unfollow_id>/delete/', views.unfollow, name='unfollow'),
 ]

@@ -63,7 +63,6 @@ class FollowUsersForm(forms.ModelForm):
         model = models.UserFollows
         fields = ['followed_user']
         labels = {'followed_user': "Utilisateurs actuels "}
-        # widgets = {'followed_user': forms.TextInput(attrs={'placeholder': 'Nom d\'utilisateur'})}
 
 
 class DeleteSubscriptionForm(forms.Form):

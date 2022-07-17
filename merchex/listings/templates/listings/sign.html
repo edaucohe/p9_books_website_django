@@ -5,9 +5,6 @@
     <h1 class="h1-form">Se connecter</h1>
 
     <form action="" method="post" novalidate>
-        <!-- {% csrf_token %} est une ligne de sécurité qu'il faut intégrer dans le formulaire -->
-<!--        {% csrf_token %}-->
-        <!-- {{ form.as_p }} permet d'empiler les champs. Si on ne le veut pas, on laisse juste {{ form }} -->
         {{ sign_in_form.as_p }}
         <input type="submit" value="Se connecter" name="sign_in_btn">
     </form>
@@ -15,9 +12,6 @@
     <h1>S'inscrire</h1>
 
     <form action="" method="post" novalidate>
-        <!-- {% csrf_token %} est une ligne de sécurité qu'il faut intégrer dans le formulaire -->
-<!--        {% csrf_token %}-->
-        <!-- {{ form.as_p }} permet d'empiler les champs. Si on ne le veut pas, on laisse juste {{ form }} -->
         {{ sign_up_form.as_p }}
         <input type="submit" value="S'inscrire" name="sign_up_btn">
     </form>

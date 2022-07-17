@@ -87,14 +87,23 @@ Une fois le serveur local lancé, adressez-vous au lien du serveur local (voir [
 Vous pouvez créer un nouvel utilisateur grâce au formulaire d'inscription. Néanmoins, la base de données est déjà remplie 
 avec des utilisateurs fictifs. Vous trouverez ci-listée les coordonnées de ces utilisateurs fictifs :
 
-|  Nom d'utilisateur  |  Mot de passe  |
-|:-------------------:|:--------------:|
-|        anne         |     hianne     |
-|        jean         |     hijean     |
-|        fred         |     hifred     |
-|        mari         |     himari     |
+| Nom d'utilisateur | Mot de passe |
+|:-----------------:|:------------:|
+|       anne        |    hianne    |
+|       tony        |    hitony    |
+|       john        |    hijohn    |
+|       mari        |    himari    |
 
-Afin d'arrêter le serveur local, tapez *ctrl + c* dans le terminal. 
+Vous pouvez aussi accéder au site d'administration en tant qu'administrateur,
+il faut juste s'adresser au http://127.0.0.1:8000/admin/ et tapez les coordonnées ci-listées :
+
+| Nom d'utilisateur | Mot de passe |
+|:-----------------:|:------------:|
+|       admin       |   hiadmin    |
+
+Dans ce site, vous aurez l'affichage des objects sauvegardés dans la base de données.
+
+Finalement, et afin d'arrêter le serveur local, tapez *ctrl + c* dans le terminal. 
 
 ## Helpful links <a class="anchor" id="links"></a>
 

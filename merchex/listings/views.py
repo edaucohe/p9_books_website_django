@@ -14,46 +14,6 @@ def log_out(request):
     return redirect('sign')
 
 
-# @csrf_protect
-def sign_up(request):
-    # ceci doit être une requête POST, donc le formulaire est rempli
-    # message = ""
-    if request.method == 'POST':
-        # créer une instance de notre formulaire "rempli" avec les données du POST
-        form = forms.SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            if user is not None:
-                login(request, user)
-                return redirect('flux')
-
-    else:
-        form = forms.SignUpForm()
-
-    # passe ce formulaire au gabarit
-    return render(request, 'listings/sign_up.html', context={'form': form})
-
-
-# @csrf_protect
-def sign_in(request):
-    if request.method == 'POST':
-        # créer une instance de notre formulaire "rempli" avec les données du POST
-        form = forms.SignInForm(request.POST)
-        if form.is_valid():
-            user = authenticate(
-                username=form.cleaned_data['username'],
-                password=form.cleaned_data['password'],
-            )
-            if user is not None:
-                login(request, user)
-                return redirect('flux')
-
-    else:
-        form = forms.SignInForm()
-
-    return render(request, 'listings/sign_in.html', {'form': form})
-
-
 def sign(request):
     if request.method == 'POST':
         sign_up_form = forms.SignUpForm(request.POST)
@@ -90,27 +50,10 @@ def sign(request):
 @login_required
 def flux(request):
     user = request.user
-    # SELECT tickets.*, photo.*
-    # FROM tickets
-    # LEFT OUTER JOIN photos ON tickets.photo_id = photos.id
-    # WHERE user_id = 5
-    #       tickets.id, tickets.user_id , ..., photos.id, photos.url
-    # 1     1         , 5               ,...., null     , null
-    # 2     3         , 5               ,...., 1        , 'https://......'
-
-    # Ticket(id=1, ..., photo=null)
-    # Ticket(id=3, ..., photo=Photo(id=1, url='https://....'))
-
-    # SELECT * FROM tickets WHERE user_id = 5  -> [Ticket(id=1,...), Ticket(id=3, ....)]
-    # ticket.photo for ticket in tickets
-    #   SELECT * FROM photos WHERE id=<photo_id>
 
     tickets = list(models.Ticket.objects.filter(Q(user=user)))
-    # if user:
-    #     reviews = list(models.Review.objects.filter(Q(user=user)))
-    # else:
     ticket_ids = [t.id for t in tickets]
-    # HOW TO django query avec une condition OU
+
     reviews = list(models.Review.objects.filter(Q(ticket__id__in=ticket_ids) | Q(user=user)))
 
     followed_users = models.UserFollows.objects.filter(user=user)
@@ -123,21 +66,13 @@ def flux(request):
     all_tickets = tickets + follows_tickets
     ticket_ids_with_review = {review.ticket for review in all_reviews}
 
-    # Remove redundant posts (like tickets with an existing review)
     all_posts = all_reviews + all_tickets
     all_posts = sorted(all_posts, key=lambda x: x.time_created, reverse=True)
-    # for followed_user in followed_users:
-    #     follows_tickets.append())
-    #     follows_photos.append(models.Photo.objects.filter(Q(uploader=followed_user.user)))
 
     models_as_context = {
         'username': user,
         'all_posts': all_posts,
-        'ticket_ids_with_review': ticket_ids_with_review,
-        # 'tickets': tickets,
-        'reviews': reviews
-        # 'follows_tickets': follows_tickets,
-        # 'follows_reviews': follows_reviews,
+        'ticket_ids_with_review': ticket_ids_with_review
     }
     return render(request, 'listings/flux.html', context=models_as_context)
 
@@ -147,11 +82,10 @@ def create_tickets(request):
     ticket_form = forms.TicketForm()
     photo_form = forms.PhotoForm()
     if request.method == 'POST':
-        # handle the POST request here
         ticket_form = forms.TicketForm(request.POST)
         photo_form = forms.PhotoForm(request.POST, request.FILES)
+
         if all([ticket_form.is_valid(), photo_form.is_valid()]):
-        # if ticket_form.is_valid():
             photo = photo_form.save(commit=False)
             photo.uploader = request.user
             photo.save()
@@ -175,11 +109,10 @@ def create_ticket_for_review(request):
     ticket_form = forms.TicketForm()
     photo_form = forms.PhotoForm()
     if request.method == 'POST':
-        # handle the POST request here
         ticket_form = forms.TicketForm(request.POST)
         photo_form = forms.PhotoForm(request.POST, request.FILES)
+
         if all([ticket_form.is_valid(), photo_form.is_valid()]):
-        # if ticket_form.is_valid():
             photo = photo_form.save(commit=False)
             photo.uploader = request.user
             photo.save()
@@ -245,14 +178,13 @@ def edit_ticket(request, ticket_id):
 
 @login_required
 def posts(request):
-    username = request.user.username
-    tickets = models.Ticket.objects.filter(Q(user__username__iexact=username))
-    photos = models.Photo.objects.filter(Q(uploader__username__iexact=username))
+    user = request.user
+    tickets = models.Ticket.objects.filter(Q(user=user))
+    photos = models.Photo.objects.filter(Q(uploader=user))
 
     tickets = sorted(tickets, key=lambda x: x.time_created, reverse=True)
 
     models_as_context = {
-        'username': username,
         'tickets': tickets,
         'photos': photos
     }
@@ -261,13 +193,10 @@ def posts(request):
 
 @login_required
 def create_review(request, ticket_id):
-    # username = request.user.username
     review_form = forms.ReviewForm()
     ticket = get_object_or_404(models.Ticket, id=ticket_id)
-    # ticket = models.Ticket.objects.filter(Q(user__username__iexact=username))
 
     if request.method == 'POST':
-        # handle the POST request here
         review_form = forms.ReviewForm(request.POST)
 
         if review_form.is_valid():
@@ -279,18 +208,6 @@ def create_review(request, ticket_id):
             return redirect('flux')
 
     return render(request, 'listings/create_review.html', context={'review_form': review_form})
-
-
-@login_required
-def show_reviews(request):
-    username = request.user.username
-    reviews = models.Review.objects.filter(Q(user__username__iexact=username))
-
-    models_as_context = {
-        'username': username,
-        'reviews': reviews,
-    }
-    return render(request, 'listings/reviews.html', context=models_as_context)
 
 
 @login_required
@@ -335,7 +252,8 @@ def subscriptions(request):
             followed_user_post_id = int(request.POST.get('followed_user', False))
 
             if followed_user_post_id == request.user.id:
-                message = "Vous ne pouvez pas vous choisir vous-même ! Choisissez un autre utilisateur, svp."
+                message = "Vous ne pouvez pas vous choisir vous-même ! " \
+                          "Choisissez un autre utilisateur, svp."
             elif followed_user_post_id in [my_follow.followed_user.id for my_follow in my_follows]:
                 message = "Utilisateur déjà suivi ! Choisissez un autre utilisateur, svp."
             else:

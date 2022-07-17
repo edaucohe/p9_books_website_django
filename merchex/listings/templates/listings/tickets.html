@@ -7,7 +7,6 @@
     <p>Créez un billet</p>
 
     <form action="" method="post" novalidate enctype="multipart/form-data">
-        <!-- {% csrf_token %} est une ligne de sécurité qu'il faut intégrer dans le formulaire -->
         {{ ticket_form.as_p }}
         {{ photo_form.as_p }}
         <input type="submit" value="Envoyer" name="envoyer">
