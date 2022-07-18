@@ -46,11 +46,6 @@ Pour récupérer le projet, lancez :
 git clone https://github.com/edaucohe/p9_books_website_django.git
 ```
 
-Pour installer les dépendances du fichier `requirements.txt`, lancez :
-```
-pip install -r requirements.txt
-```
-
 Pour créer l'environnement virtuel, placez-vous dans le dossier `../projet9` et tapez :
 ```
 python -m venv env  
@@ -65,6 +60,11 @@ source env/Scripts/activate
 - Sur Mac/Linux
 ```
 source env/bin/activate
+```
+
+Pour installer les dépendances du fichier `requirements.txt`, lancez :
+```
+pip install -r requirements.txt
 ```
 
 ## Setup <a class="anchor" id="setup"></a>
