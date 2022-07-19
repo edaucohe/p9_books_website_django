@@ -137,7 +137,7 @@ def edit_ticket(request, ticket_id):
     photo = ticket.photo
 
     edit_form = forms.TicketForm(instance=ticket)
-    photo_form = forms.PhotoForm(instance=photo)
+    photo_form = forms.PhotoForm()
     delete_form = forms.DeleteTicketForm()
     delete_photo_form = forms.DeletePhotoForm()
 
@@ -149,11 +149,10 @@ def edit_ticket(request, ticket_id):
             if all([edit_form.is_valid(), photo_form.is_valid()]):
                 edit_form.save()
 
-                if ticket.photo.image:
+                if ticket.photo.image and request.FILES:
                     photo_path = ticket.photo.image.path
                     if os.path.exists(photo_path):
                         os.remove(photo_path)
-
                 photo_form.save()
 
                 return redirect('flux')
@@ -266,6 +265,7 @@ def subscriptions(request):
                     follow_form.followed_user = user_to_follow_from_post
                     follow_form.save()
                     message = "Abonnement réussi !"
+                    my_follows = models.UserFollows.objects.filter(user=request.user)
 
     models_as_context = {
         'request_user': request.user,
